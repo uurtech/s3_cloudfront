@@ -77,16 +77,24 @@ Create a file called `bucket-policy.json`:
 
 ```json
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "PublicReadGetObject",
-      "Effect": "Allow",
-      "Principal": "*",
-      "Action": "s3:GetObject",
-      "Resource": "arn:aws:s3:::BUCKET_NAME_PLACEHOLDER/*"
-    }
-  ]
+    "Version": "2008-10-17",
+    "Id": "PolicyForCloudFrontPrivateContent",
+    "Statement": [
+        {
+            "Sid": "AllowCloudFrontServicePrincipal",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "cloudfront.amazonaws.com"
+            },
+            "Action": "s3:GetObject",
+            "Resource": "arn:aws:s3:::[[BUCKET_NAME]]/*",
+            "Condition": {
+                "ArnLike": {
+                    "AWS:SourceArn": "CLOUDFRONT_DIST_ARN"
+                }
+            }
+        }
+    ]
 }
 ```
 
